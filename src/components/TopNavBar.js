@@ -1,12 +1,10 @@
-import React from 'react';
+import { Link } from "react-router-dom";
 function TopNavBar() {
   return (
     <>  
       <nav className="navbar navbar-expand-lg navbar-dark navbar-custom">
         <div className="container-fluid">
-          <a className="navbar-brand fw-bold" href="#">
-            StockScanner
-          </a>
+          <Link to="/" className="navbar-brand fw-bold">StockScanner</Link>          
           <button
             className="navbar-toggler"
             type="button"
@@ -18,66 +16,28 @@ function TopNavBar() {
           <div className="collapse navbar-collapse" id="navbarMenu">
             <ul className="navbar-nav me-auto">
               <li className="nav-item dropdown">
-                <a
-                  className="nav-link dropdown-toggle"
-                  href="#"
-                  data-bs-toggle="dropdown"
-                >
-                  Market Tools
-                </a>
+                <Link to="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown">Market Tools</Link>                
                 <ul className="dropdown-menu">
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Top Gainers
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Top Losers
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Volume Buzzers
-                    </a>
-                  </li>
+                  <li><Link to="rsi-divergence-scanner" className="dropdown-item">RSI Divergence</Link></li>                  
+                  <li><Link to="StockRSI" className="dropdown-item">Top Losers</Link></li>                  
+                  <li><Link to="rsi-divergence-scanner" className="dropdown-item">Volume Buzzers</Link></li>                  
                 </ul>
               </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">
-                  Screener
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">
-                  Alerts
-                </a>
-              </li>
+              <li className="nav-item"><Link to="/about" className="nav-link">Screener</Link></li>
+              <li className="nav-item"><Link to="/about" className="nav-link">Alerts</Link></li>              
+              <li className="nav-item"><Link to="/about" className="nav-link">About Us</Link></li>
+              <li className="nav-item"><Link to="/contact" className="nav-link">Contact</Link></li>
+              <li className="nav-item"><Link to="/privacy-policy" className="nav-link">Privacy Policy</Link></li>
+              <li className="nav-item"><Link to="/terms" className="nav-link">Terms and Conditions</Link></li>              
             </ul>
             {/* User Dropdown */}
             <ul className="navbar-nav ms-auto">
               <li className="nav-item dropdown">
-                <a
-                  className="nav-link dropdown-toggle"
-                  href="#"
-                  data-bs-toggle="dropdown"
-                >
-                  <i className="bi bi-person-circle" /> User
-                </a>
+                <Link to="/users" className="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i className="bi bi-person-circle" /> User</Link>
                 <ul className="dropdown-menu dropdown-menu-end">
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Profile
-                    </a>
-                  </li>
-                  <li>
-                    <hr className="dropdown-divider" />
-                  </li>
-                  <li>
-                    <a className="dropdown-item text-danger" href="#">
-                      Logout
-                    </a>
-                  </li>
+                  <li><Link to="/users" className="dropdown-item">Profile</Link></li>
+                  <li><hr className="dropdown-divider" /></li>
+                  <li><Link to="/users" className="dropdown-item text-danger">Logout</Link></li>
                 </ul>
               </li>
             </ul>

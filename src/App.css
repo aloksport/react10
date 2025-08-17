@@ -41,3 +41,8 @@ body { background-color: #f8f9fa;}
 .ad-box {background: #f1f1f1;border: 1px dashed #ccc;height: 250px;display: flex;align-items: center;
   justify-content: center;font-weight: bold;color: #555;}
 .ad-mobile {height: 100px; }
+
+/* For Loader */
+.loading-overlay {position: fixed;top: 0;left: 0;width: 100%;height: 100%; background: rgba(255, 255, 255, 0.7);
+  display: flex;justify-content: center;align-items: center;z-index: 2000;}
+
