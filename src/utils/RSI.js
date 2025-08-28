@@ -36,7 +36,21 @@ export default function calculateRSI(closingValues, period = 14) {
 
   return rsi;
 }
-function analyzeRSI({ rsi, arrayHighPrice, arrayLowPrice, arrayClosePrice, arrayDate, days }) {
+export const  abcd = (days) => {
+  return days;
+};
+export const addNumbers = (a, b) => {
+  console.log("Sum:", a + b);
+  return a + b;
+};
+export const analyzeRSI =(stockSymbol,rsi, arrayHighPrice, arrayLowPrice, arrayClosePrice, arrayDate, days) => {
+  /*console.log( "RSI:", rsi);
+  console.log( "openPrice:", arrayHighPrice);
+  console.log( "highPrice:", arrayLowPrice);
+  console.log( "lowPrice:", arrayClosePrice);
+  console.log( "closePrice:", arrayClosePrice);
+  console.log( "tradingDate:", arrayDate); 
+  console.log( "days:", days); */
   let max = null;
   let max_value_date = null;
   let min_value = null;
@@ -82,6 +96,7 @@ function analyzeRSI({ rsi, arrayHighPrice, arrayLowPrice, arrayClosePrice, array
 
         if (current_rsi - min_rsi > 1 /* && percentDiffInPrice > 1 */) {
           return {
+            symbol:stockSymbol,
             type: "Bull",
             min_rsi,
             min_value,
@@ -108,6 +123,7 @@ function analyzeRSI({ rsi, arrayHighPrice, arrayLowPrice, arrayClosePrice, array
 
         if (max_rsi - current_rsi > 1 /* && percentDiffInPrice > 1 */) {
           return {
+            symbol:stockSymbol,
             type: "Bear",
             max_rsi,
             max,
@@ -121,6 +137,35 @@ function analyzeRSI({ rsi, arrayHighPrice, arrayLowPrice, arrayClosePrice, array
     }
   }
 
-  return null; // no signal
+  return ""; // no signal
 }
 
+export const getStockBySymbol = (rows, symbol) => {
+  const stock = rows.find(item => item.stk_symbol === symbol);
+  if (!stock) return null;
+
+  return {
+    stk_symbol: stock.stk_symbol,
+    data: stock.stk_date.map((date, idx) => ({
+      date,
+      open: stock.stk_open[idx],
+      high: stock.array_high[idx],
+      low: stock.stk_low[idx],
+      close: stock.array_close[idx]
+    }))
+  };
+};
+
+        //console.log(symbol, "RSI:", rsi);
+        //const greeting = addNumbers(25,10);
+        //console.log("RSI Values:", greeting);
+        //const greeting1 = abcd(50);
+        //console.log("RSI greeting1:", greeting1);
+        /*console.log(symbol, "openPrice:", openPrice.reverse());
+        console.log(symbol, "highPrice:", highPrice.reverse());
+        console.log(symbol, "lowPrice:", lowPrice.reverse());
+        console.log(symbol, "closePrice:", closePrice.reverse());
+        console.log(symbol, "tradingDate:", tradingDate.reverse());*/ 
+        
+        //const rsiValues2 = abcd(50);
+        //console.log("RSI Values:", rsiValues2);
