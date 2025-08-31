@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import SelectBoxNoOfDays from "../components/SelectBoxNoOfDays";
 import SelectBoxNifty from "../components/SelectBoxNifty";
 import Global from "../components/Global";
+import { formatDate } from "../components/Global";
 import calculateRSI from '../utils/RSI';
 import {analyzeRSI} from '../utils/RSI';
 //import {abcd,addNumbers} from '../utils/RSI';
@@ -77,7 +78,7 @@ function RSIDivergence() {
         if (rsidiverg && Object.keys(rsidiverg).length > 0) {
           setrsiDivergData(prev => [...prev, rsidiverg]);
         }
-        console.log(stockSymbol, "RSI1:", rsidiverg);
+        //console.log(stockSymbol, "RSI1:", rsidiverg);
       });      
     } catch (err) {
         console.error("Error submitting:", err);
@@ -102,15 +103,17 @@ function RSIDivergence() {
     <table className="table table-bordered table-striped mt-3">
       <thead>
         <tr>
-            <th>Stock Symbol</th>
+            <th>Symbol</th>
             <th>Date</th>
-            <th>Close</th>
+            <th>RSI</th>
+            <th>Close Price</th>
+            <th>Type</th>
         </tr>
       </thead>
       <tbody>
         {loading ? (
           <tr>
-            <td className="text-center" colSpan={3}>
+            <td className="text-center" colSpan={6}>
               <div className="spinner-border text-primary" role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>
@@ -120,13 +123,15 @@ function RSIDivergence() {
           rsiDivergData.map((item, index) => (
             <tr key={index}>
               <td>{item.symbol}</td>
-              <td>{item.min_value_date}</td>
+              <td>{formatDate(item.current_date)} / {item.type === "Bull" ? formatDate(item.min_value_date) : formatDate(item.max_value_date)} </td>
+              <td>{item.current_rsi} / {item.type === "Bull" ? item.min_rsi : item.max_rsi}</td>
+              <td>{item.current_close} / {item.type === "Bull" ? item.min_value : item.max}</td>
               <td>{item.type}</td>
             </tr>
           ))
         ) : (
           <tr>
-            <td className="text-center" colSpan={3}>
+            <td className="text-center" colSpan={6}>
               No data available. Please submit.
             </td>
           </tr>

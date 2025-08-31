@@ -1635,7 +1635,7 @@ class functions{
 		$duration=$data['getDataFromDate'];
 		$conn = new Database();
 		$ma_status=array();
-		$sql="select stk_symbol from tbl_isin_code  where stk_nifty_status='".$niftyStatus."' limit 10,10";		
+		$sql="select stk_symbol from tbl_isin_code  where stk_nifty_status='".$niftyStatus."' limit 40,10";//$sql="select stk_symbol from tbl_isin_code  where stk_nifty_status='".$niftyStatus."' and stk_symbol='DRREDDY'";		
 		$query= $conn->query($sql);
 		$result = $conn->resultset($query);//echo '<pre>';print_r($result);die;
 		$last120days=strtotime("-$duration days");

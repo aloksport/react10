@@ -5,10 +5,12 @@ const protocol = `${window.location.protocol}`;
 const hostname = `${window.location.hostname}`;
 Global.currentHost = protocol+'//'+hostname + '/'+directoryName;
 Global.allow_useraction_role = ['1', '2'];
-export function formatDate(date)  {
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];    
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = months[date.getMonth()];
-    const year = date.getFullYear();    
-    return `${day} ${month} ${year}`;
-};
+export function formatDate(dateStr) {
+  if (!dateStr) return "";
+  const date = new Date(dateStr);
+  return date.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+  }).replace(/ /g, "-"); 
+}

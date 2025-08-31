@@ -44,13 +44,7 @@ export const addNumbers = (a, b) => {
   return a + b;
 };
 export const analyzeRSI =(stockSymbol,rsi, arrayHighPrice, arrayLowPrice, arrayClosePrice, arrayDate, days) => {
-  /*console.log( "RSI:", rsi);
-  console.log( "openPrice:", arrayHighPrice);
-  console.log( "highPrice:", arrayLowPrice);
-  console.log( "lowPrice:", arrayClosePrice);
-  console.log( "closePrice:", arrayClosePrice);
-  console.log( "tradingDate:", arrayDate); 
-  console.log( "days:", days); */
+
   let max = null;
   let max_value_date = null;
   let min_value = null;
@@ -64,14 +58,14 @@ export const analyzeRSI =(stockSymbol,rsi, arrayHighPrice, arrayLowPrice, arrayC
 
   for (let i = 0; i < days; i++) {
     if (max_rsi < rsi[i]) {
-      max = arrayHighPrice[i];
+      max = arrayClosePrice[i];//Earlier it was max = arrayHighPrice[i];
       max_value_date = arrayDate[i];
       max_rsi = rsi[i];
       allMaxHighprice.push(arrayClosePrice[i]);
     }
-
+    //console.log(rsi[i]);
     if (min_rsi > rsi[i]) {
-      min_value = arrayLowPrice[i];
+      min_value = arrayClosePrice[i];
       min_value_date = arrayDate[i];
       min_rsi = rsi[i];
       allMinLowPrice.push(arrayClosePrice[i]);
@@ -79,19 +73,28 @@ export const analyzeRSI =(stockSymbol,rsi, arrayHighPrice, arrayLowPrice, arrayC
   }
 
   const current_rsi = rsi[0];
-  const current_low = arrayLowPrice[0];
-  const current_high = arrayHighPrice[0];
+  const current_close = arrayClosePrice[0];
+  //const current_high = arrayHighPrice[0];
   const current_date = arrayDate[0];
 
+  // Earlier we were checking the low and high price and now comparing to close price
+  /*console.log( "min_rsi:", min_rsi);
+  console.log( "min_close_value:", min_value);
+  console.log( "min_value_date:", min_value_date);
+  console.log( "current_rsi:", current_rsi);
+  console.log( "allMinLowPrice:", allMinLowPrice);
+  console.log( "current_close:", current_close); 
+  /*console.log( "days:", days); */
+
   // ✅ BULLISH DIVERGENCE
-  if (current_rsi > min_rsi && current_low < min_value) {
-    if (current_low <= Math.min(...allMinLowPrice)) {
+  if (current_rsi > min_rsi && current_close < min_value) {
+    if (current_close <= Math.min(...allMinLowPrice)) {
       const date1 = new Date(current_date);
       const date2 = new Date(min_value_date);
       const daysDifference = (date1 - date2) / (1000 * 60 * 60 * 24);
 
       if (daysDifference > 4) {
-        const diffInPrice = current_low - min_value;
+        const diffInPrice = current_close - min_value;
         const percentDiffInPrice = (diffInPrice * 100) / min_value;
 
         if (current_rsi - min_rsi > 1 /* && percentDiffInPrice > 1 */) {
@@ -102,7 +105,7 @@ export const analyzeRSI =(stockSymbol,rsi, arrayHighPrice, arrayLowPrice, arrayC
             min_value,
             min_value_date,
             current_rsi,
-            current_low,
+            current_close,
             current_date
           };
         }
@@ -111,14 +114,14 @@ export const analyzeRSI =(stockSymbol,rsi, arrayHighPrice, arrayLowPrice, arrayC
   }
 
   // ✅ BEARISH DIVERGENCE
-  if (current_rsi < max_rsi && current_high > max) {
+  if (current_rsi < max_rsi && current_close > max) {
     if (max >= Math.max(...allMaxHighprice)) {
       const date1 = new Date(current_date);
       const date2 = new Date(max_value_date);
       const daysDifference = (date1 - date2) / (1000 * 60 * 60 * 24);
 
       if (daysDifference > 4) {
-        const diffInPrice = current_high - max;
+        const diffInPrice = current_close - max;
         const percentDiffInPrice = (diffInPrice * 100) / max;
 
         if (max_rsi - current_rsi > 1 /* && percentDiffInPrice > 1 */) {
@@ -129,7 +132,7 @@ export const analyzeRSI =(stockSymbol,rsi, arrayHighPrice, arrayLowPrice, arrayC
             max,
             max_value_date,
             current_rsi,
-            current_high,
+            current_close,
             current_date
           };
         }
@@ -139,22 +142,6 @@ export const analyzeRSI =(stockSymbol,rsi, arrayHighPrice, arrayLowPrice, arrayC
 
   return ""; // no signal
 }
-
-export const getStockBySymbol = (rows, symbol) => {
-  const stock = rows.find(item => item.stk_symbol === symbol);
-  if (!stock) return null;
-
-  return {
-    stk_symbol: stock.stk_symbol,
-    data: stock.stk_date.map((date, idx) => ({
-      date,
-      open: stock.stk_open[idx],
-      high: stock.array_high[idx],
-      low: stock.stk_low[idx],
-      close: stock.array_close[idx]
-    }))
-  };
-};
 
         //console.log(symbol, "RSI:", rsi);
         //const greeting = addNumbers(25,10);
