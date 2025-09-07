@@ -16,7 +16,7 @@ class Database{
 			$this->host= 'localhost';
 			$this->user ='root';
 			$this->pass ='';
-			$this->dbname = 'ranchipo_stock';
+			$this->dbname = 'stock';
 		} else {
 		    $this->host= 'qawiojqframe.mysql.db';
 			$this->user ='qawiojqframe';
