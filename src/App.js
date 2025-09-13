@@ -6,6 +6,8 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "./App.css";
 import Layout from "./Layout";
 import RSIDivergence from './pages/RSIDivergence';
+import DoubleTop from './pages/DoubleTop';
+import DoubleBottom from './pages/DoubleBottom';
 import StockRSI from './pages/StockRSI';
 import Scanners from './pages/Scanners';
 import About from "./pages/AboutUs";
@@ -23,6 +25,8 @@ function App() {
           <Route path="scanners" element={<Scanners />} />
           <Route path="scanners/StockRSI" element={<StockRSI />} />
           <Route path="scanners/rsi-divergence-scanner" element={<RSIDivergence />} />
+          <Route path="scanners/double-top" element={<DoubleTop />} />
+          <Route path="scanners/double-bottom" element={<DoubleBottom />} />
          
           {/* Other Pages */}
           <Route path="about" element={<About />} />

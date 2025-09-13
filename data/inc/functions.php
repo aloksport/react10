@@ -1631,38 +1631,32 @@ class functions{
 	
 	function ohlcData($data){
 		//echo '<pre>';print_r($niftyStatus=$data['niftyStatus']);die;
-		$niftyStatus=$data['niftyStatus'];
-		$duration=$data['getDataFromDate'];
 		$conn = new Database();
-		$ma_status=array();
-		$sql="select stk_symbol from tbl_isin_code  where stk_nifty_status='".$niftyStatus."' limit 40,10";//$sql="select stk_symbol from tbl_isin_code  where stk_nifty_status='".$niftyStatus."' and stk_symbol='DRREDDY'";		
+		$niftyStatus=$data['niftyStatus'];		
+		$scannerType=$data['scannerType'];
+		if($scannerType== 'rsidivergence'){
+			$getDataFromDate=$data['getDataFromDate'];
+			$last120days=strtotime("-$getDataFromDate days");
+			$from_date=date("Y-m-d",$last120days);
+			$parameter='and stk_date>='.$from_date.' order by stk_date asc';
+		}elseif($scannerType =='doubletop' or $scannerType=='doublebottom'){
+			$totalDays=$data['duration'];
+			$parameter='order by stk_date desc limit '.$totalDays.'';
+		}
+		
+		$ma_status=array();		
+		//$sql="select stk_symbol from tbl_isin_code  where stk_nifty_status='".$niftyStatus."' 
+		//and stk_symbol='INDUSINDBK' limit 0,2";
+		$sql="select stk_symbol from tbl_isin_code  where stk_nifty_status='".$niftyStatus."'";		
 		$query= $conn->query($sql);
 		$result = $conn->resultset($query);//echo '<pre>';print_r($result);die;
-		$last120days=strtotime("-$duration days");
-		$from_date=date("Y-m-d",$last120days);$result1=(array) null;
+		$result1=(array) null;
 		foreach($result as $key=>$val){
-			$sql="select id,stk_symbol,stk_date,stk_open_price,stk_high_price,stk_low_price, stk_close_price   from tbl_daily_bhav_data where stk_symbol='".$val['stk_symbol']."' and stk_date>='".$from_date."' order by stk_date asc"; 
+			$sql="select id,stk_symbol,stk_date,stk_open_price,stk_high_price,stk_low_price, stk_close_price   from tbl_daily_bhav_data where stk_symbol='".$val['stk_symbol']."'    $parameter";
 			$query= $conn->query($sql);
-			$result1[] = $conn->resultset($query);
-			//print_r($result1);
-			
-		}
-		/*	$array_close=(array) null;$array_date=(array) null;$array_open=(array) null;
-			$array_high=(array) null;$array_low=(array) null;
-			foreach($result1 as $key1=>$val1){
-				$stk_symbol=$val1['stk_symbol'];
-				$array_date[]=date("Y-m-d",strtotime($val1['stk_date']));
-				$array_open[]=$val1['stk_open_price'];
-				$array_high[]=$val1['stk_high_price'];
-				$array_low[]=$val1['stk_low_price'];
-				$array_close[]=$val1['stk_close_price'];
-				
-			}
-			$ma_status[]=array(	"stk_symbol"=>$stk_symbol,"stk_date"=>$array_date,"stk_open"=>$array_open,
-			"array_high"=>$array_high,"stk_low"=>$array_low,"array_close"=>$array_close);
-		}*/
+			$result1[] = $conn->resultset($query);			
+		}		
 		$ma_status=json_encode($result1,true);
-		//print_r( $ma_status);
 		return $ma_status;
 	}
 }
