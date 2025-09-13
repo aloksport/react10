@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import SelectBoxNoOfDays from "../components/SelectBoxNoOfDays";
 import SelectBoxNifty from "../components/SelectBoxNifty";
 import Global from "../components/Global";
