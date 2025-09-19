@@ -1634,6 +1634,7 @@ class functions{
 		$conn = new Database();
 		$niftyStatus=$data['niftyStatus'];		
 		$scannerType=$data['scannerType'];
+		$field='id,stk_symbol,stk_date,stk_open_price,stk_high_price,stk_low_price, stk_close_price';
 		if($scannerType== 'rsidivergence'){
 			$getDataFromDate=$data['getDataFromDate'];
 			$last120days=strtotime("-$getDataFromDate days");
@@ -1642,17 +1643,21 @@ class functions{
 		}elseif($scannerType =='doubletop' or $scannerType=='doublebottom'){
 			$totalDays=$data['duration'];
 			$parameter='order by stk_date desc limit '.$totalDays.'';
+		}elseif($scannerType =='nsedata'){
+			$from_date=$data['getDataFromDate'];
+			$field= ' * ';
+			$parameter = " and stk_date='" . $from_date . "'  order by stk_symbol asc";
 		}
 		
 		$ma_status=array();		
 		//$sql="select stk_symbol from tbl_isin_code  where stk_nifty_status='".$niftyStatus."' 
-		//and stk_symbol='INDUSINDBK' limit 0,2";
+		//and stk_symbol='INDUSINDBK' limit 0,5";
 		$sql="select stk_symbol from tbl_isin_code  where stk_nifty_status='".$niftyStatus."'";		
 		$query= $conn->query($sql);
 		$result = $conn->resultset($query);//echo '<pre>';print_r($result);die;
 		$result1=(array) null;
 		foreach($result as $key=>$val){
-			$sql="select id,stk_symbol,stk_date,stk_open_price,stk_high_price,stk_low_price, stk_close_price   from tbl_daily_bhav_data where stk_symbol='".$val['stk_symbol']."'    $parameter";
+			$sql="select   $field   from tbl_daily_bhav_data where stk_symbol='".$val['stk_symbol']."'    $parameter";
 			$query= $conn->query($sql);
 			$result1[] = $conn->resultset($query);			
 		}		
