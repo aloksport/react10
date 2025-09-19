@@ -18,10 +18,10 @@ class Database{
 			$this->pass ='';
 			$this->dbname = 'stock';
 		} else {
-		    $this->host= 'qawiojqframe.mysql.db';
-			$this->user ='qawiojqframe';
-			$this->pass ='DFIfbRa1504Ab';
-			$this->dbname = 'qawiojqframe';
+		    $this->host= '192.168.0.100';
+			$this->user ='springto';
+			$this->pass ='mongodb$123';
+			$this->dbname = 'springto_sprinttown';
 		}
         $dsn = 'mysql:host=' . $this->host . ';dbname=' . $this->dbname;
         // Set options

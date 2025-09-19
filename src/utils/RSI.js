@@ -143,6 +143,45 @@ export const analyzeRSI =(stockSymbol,rsi, arrayHighPrice, arrayLowPrice, arrayC
   return ""; // no signal
 }
 
+export const doubleTop =(stockSymbol, arrayHighPrice,  arrayClosePrice, arrayDate, days) => {
+  let percentDiff = 0.5;
+  const todayHigh = arrayHighPrice[0];
+  const todayDate = arrayDate[0];
+  let highestPrice=Math.max(...arrayHighPrice);
+  let highestIndex = arrayHighPrice.indexOf(highestPrice);
+  let highestPriceDate=arrayDate[highestIndex];
+  if(todayHigh<highestPrice){
+    let priceDiff = highestPrice - todayHigh;
+    let percentInPriceDiff = (priceDiff * 100) / highestPrice;
+    if (percentInPriceDiff < percentDiff) {        
+        return {symbol:stockSymbol,type: "Near Resistance",highestDate:highestPriceDate,highestPrice:highestPrice,
+          todayHigh:todayHigh,todayDate:todayDate
+        };
+    }else{
+      return null;
+    }
+  }
+}
+
+export const doubleBottom =(stockSymbol, arrayLowPrice,  arrayClosePrice, arrayDate, days) => {
+  let percentDiff = 0.5;
+  const todayLow = arrayLowPrice[0];
+  const todayDate = arrayDate[0];
+  let lowestPrice=Math.min(...arrayLowPrice);
+  let highestIndex = arrayLowPrice.indexOf(lowestPrice);
+  let lowestPriceDate=arrayDate[highestIndex];
+  if(todayLow>lowestPrice){
+    let priceDiff = todayLow -lowestPrice  ;
+    let percentInPriceDiff = (priceDiff * 100) / lowestPrice;
+    if (percentInPriceDiff < percentDiff) {        
+        return {symbol:stockSymbol,type: "Near Support",lowestDate:lowestPriceDate,lowestPrice:lowestPrice,
+          todayLow:todayLow,todayDate:todayDate
+        };
+    }else{
+      return null;
+    }
+  }
+}
         //console.log(symbol, "RSI:", rsi);
         //const greeting = addNumbers(25,10);
         //console.log("RSI Values:", greeting);

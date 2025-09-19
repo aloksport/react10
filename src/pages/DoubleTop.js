@@ -1,26 +1,23 @@
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect  } from "react";
 import SelectBoxNoOfDays from "../components/SelectBoxNoOfDays";
 import SelectBoxNifty from "../components/SelectBoxNifty";
 import Global from "../components/Global";
 import { formatDate } from "../components/Global";
-import calculateRSI from '../utils/RSI';
-import {analyzeRSI} from '../utils/RSI';
-//import {abcd,addNumbers} from '../utils/RSI';
+import {doubleTop} from '../utils/RSI';
 const stockUrl = Global.currentHost + "/stockAction.php";
 
-function RSIDivergence() {
-  const [rows, setRows] = useState([]);
+function DoubleTop() {
   const [nifty, setNifty] = useState("");
   const [days, setDays] = useState("");
   const [loading, setLoading] = useState(false);
   const [niftyInvalid, setNiftyInvalid] = useState(false);
   const [daysInvalid, setDaysInvalid] = useState(false);
-  const [rsiDivergData, setrsiDivergData] = useState([]);
+  const [dblTopData, setDblTopData] = useState([]);
   useEffect(() => {
-    document.title = "RSI Divergence | Live Stock Screener";
+    document.title = "Double Top | Live Stock Screener";
   }, []);
   const handleSubmit = async () => {
-    setrsiDivergData([]);
+    setDblTopData([]);
     let valid = true;
     if (!nifty) {
       setNiftyInvalid(true);
@@ -38,8 +35,8 @@ function RSIDivergence() {
       action: "ohlcData",
       niftyStatus: nifty,
       duration: days,
-      getDataFromDate: 299,
-      scannerType:'rsidivergence'
+      getDataFromDate: days,
+      scannerType:'doubletop'
     };
 
     try {
@@ -49,39 +46,25 @@ function RSIDivergence() {
         body: JSON.stringify(payload),
       });
       const data = await res.json();
-      //console.log(data);
-      setRows(data);
-
-      //
-      // Loop through each stock’s data
       data.forEach(stockArray => {
-        // Extract symbol name (from first object)
+        // Extract symbol name (from first object)        
         const stockSymbol = stockArray[0].stk_symbol;
-
         // Extract closing prices as numbers, sorted by date
-        const closingPrices = stockArray
-          //.sort((a, b) => new Date(a.stk_date) - new Date(b.stk_date)) // ensure chronological order
-          .map(item => parseFloat(item.stk_close_price));
-
-        // Call RSI function        
-        const openPrice = stockArray.map(item => parseFloat(item.stk_open_price));
+        const closingPrices = stockArray.map(item => parseFloat(item.stk_close_price));
         const highPrice = stockArray.map(item => parseFloat(item.stk_high_price));
         const lowPrice = stockArray.map(item => parseFloat(item.stk_low_price));
         const closePrice = stockArray.map(item => parseFloat(item.stk_close_price));
         const tradingDate = stockArray.map(item => item.stk_date);
-        const rsi = calculateRSI(closingPrices, 14);
-        rsi.reverse();
-        openPrice.reverse();
-        highPrice.reverse();
-        lowPrice.reverse();
-        closePrice.reverse();
-        tradingDate.reverse();
-        const rsidiverg= analyzeRSI(stockSymbol,rsi, highPrice, lowPrice, closePrice, tradingDate, days);
-        //setrsiDivergData(prev => [...prev, rsidiverg]);
-        if (rsidiverg && Object.keys(rsidiverg).length > 0) {
-          setrsiDivergData(prev => [...prev, rsidiverg]);
+        //highPrice.reverse();
+        //lowPrice.reverse();
+        //closePrice.reverse();
+        //tradingDate.reverse();
+        
+        // Call the double Top function
+        const dblTop= doubleTop(stockSymbol, highPrice, closePrice, tradingDate, days);
+        if (dblTop) {
+            setDblTopData(prev => [...prev, dblTop]);
         }
-        //console.log(stockSymbol, "RSI1:", rsidiverg);
       });      
     } catch (err) {
         console.error("Error submitting:", err);
@@ -89,7 +72,7 @@ function RSIDivergence() {
         setLoading(false);
     }
   };
-  //console.log(rsiDivergData);
+  //console.log(dblTopData);
   return (
     <>        
       <h2 className="mb-3">Live Stock Screener</h2>
@@ -107,8 +90,7 @@ function RSIDivergence() {
       <thead>
         <tr>
             <th>Symbol</th>
-            <th>Date</th>
-            <th>RSI</th>
+            <th>Date</th>            
             <th>Close Price</th>
             <th>Type</th>
         </tr>
@@ -122,13 +104,12 @@ function RSIDivergence() {
               </div>
             </td>
           </tr>
-        ) : rsiDivergData.length > 0 ? (
-          rsiDivergData.map((item, index) => (
+        ) : dblTopData.length > 0 ? (
+          dblTopData.map((item, index) => (
             <tr key={index}>
               <td>{item.symbol}</td>
-              <td>{formatDate(item.current_date)} / {item.type === "Bull" ? formatDate(item.min_value_date) : formatDate(item.max_value_date)} </td>
-              <td>{item.current_rsi} / {item.type === "Bull" ? item.min_rsi : item.max_rsi}</td>
-              <td>{item.current_close} / {item.type === "Bull" ? item.min_value : item.max}</td>
+              <td>{formatDate(item.todayDate)} / {formatDate(item.highestDate)} </td>
+              <td>{item.todayHigh} / {item.highestPrice}</td>
               <td>{item.type}</td>
             </tr>
           ))
@@ -145,4 +126,4 @@ function RSIDivergence() {
   );
 }
 
-export default RSIDivergence;
+export default DoubleTop;
