@@ -182,6 +182,32 @@ export const doubleBottom =(stockSymbol, arrayLowPrice,  arrayClosePrice, arrayD
     }
   }
 }
+
+// Breakout with volume
+export const breakoutwithvolume =(stockSymbol,  arrayClosePrice, arrayDate, arrayVolume, days) => {  
+  const todayClose = arrayClosePrice[0];
+  const todayDate = arrayDate[0];
+  const todayVolume = arrayVolume[0];
+  const uniqueSorted = [...new Set(arrayClosePrice)].sort((a, b) => b - a);
+  const secondLargestPrice = uniqueSorted[1];
+  let secondLargestCloseIndex = arrayClosePrice.indexOf(secondLargestPrice);
+  let secondLargestclosePriceDate=arrayDate[secondLargestCloseIndex];
+  const lastFiveDaysVolume=parseInt(arrayVolume[5])+parseInt(arrayVolume[4])+parseInt(arrayVolume[3])+parseInt(arrayVolume[2])+parseInt(arrayVolume[1]);
+
+  /*console.log("secondLargestPrice"+secondLargestPrice);
+  console.log("secondLargestclosePriceDate"+secondLargestclosePriceDate);
+  console.log("todayClose"+todayClose);
+  console.log("lastFiveDaysVolume"+lastFiveDaysVolume);
+  console.log("stockSymbol"+stockSymbol);*/  
+ 
+  if(todayClose>secondLargestPrice && todayVolume>lastFiveDaysVolume){         
+        return {symbol:stockSymbol,type: "Breakout",secondLargestclosePriceDate:secondLargestclosePriceDate
+          ,todayDate:todayDate,todayClose:todayClose,secondLargestPrice:secondLargestPrice
+        };
+  }else{
+      return null;
+  }  
+}
         //console.log(symbol, "RSI:", rsi);
         //const greeting = addNumbers(25,10);
         //console.log("RSI Values:", greeting);

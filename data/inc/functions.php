@@ -1643,6 +1643,55 @@ class functions{
 		}elseif($scannerType =='doubletop' or $scannerType=='doublebottom'){
 			$totalDays=$data['duration'];
 			$parameter='order by stk_date desc limit '.$totalDays.'';
+		}elseif($scannerType =='breakoutwithvolume'){
+			$totalDays=$data['duration'];
+			$field='id,stk_symbol,stk_date, stk_close_price, stk_ttl_trd_qnty';
+			$parameter='order by stk_date desc limit '.$totalDays.'';
+		}elseif($scannerType =='nsedata'){
+			$from_date=$data['getDataFromDate'];
+			$field= ' * ';
+			$parameter = " and stk_date='" . $from_date . "'  order by stk_symbol asc";
+		}
+		
+		$ma_status=array();		
+		//$sql="select stk_symbol from tbl_isin_code  where stk_nifty_status='".$niftyStatus."' 
+		//and stk_symbol='HINDZINC' limit 0,5";
+		$sql="select stk_symbol from tbl_isin_code  where stk_nifty_status='".$niftyStatus."'";		
+		$query= $conn->query($sql);
+		$result = $conn->resultset($query);//echo '<pre>';print_r($result);die;
+		$result1=(array) null;
+		foreach($result as $key=>$val){
+			$sql="select   $field   from tbl_daily_bhav_data where stk_symbol='".$val['stk_symbol']."'    $parameter";
+			$query= $conn->query($sql);
+			$result1[] = $conn->resultset($query);			
+		}		
+		$ma_status=json_encode($result1,true);
+		return $ma_status;
+	}
+	function volumnBreakOut($data){
+		$conn = new Database();
+		$niftyStatus=$data['niftyStatus'];		
+		$scannerType=$data['volume-breakout'];
+		$sql="SELECT stk_symbol, MAX(CASE WHEN stk_date = '2025-09-24' THEN stk_ttl_trd_qnty END) AS today_qty, SUM(CASE WHEN stk_date BETWEEN DATE_SUB('2025-09-24', INTERVAL 5 DAY) AND DATE_SUB('2025-09-24', INTERVAL 1 DAY)  THEN stk_ttl_trd_qnty END) AS last_5_days_sum FROM tbl_daily_bhav_data";
+		$query= $conn->query($sql);
+		$result1[] = $conn->resultset($query);
+		$ma_status=json_encode($result1,true);
+		return $ma_status;
+		
+		/*
+		//echo '<pre>';print_r($niftyStatus=$data['niftyStatus']);die;
+		$conn = new Database();
+		$niftyStatus=$data['niftyStatus'];		
+		$scannerType=$data['scannerType'];
+		$field='id,stk_symbol,stk_date,stk_open_price,stk_high_price,stk_low_price, stk_close_price';
+		if($scannerType== 'rsidivergence'){
+			$getDataFromDate=$data['getDataFromDate'];
+			$last120days=strtotime("-$getDataFromDate days");
+			$from_date=date("Y-m-d",$last120days);
+			$parameter='and stk_date>='.$from_date.' order by stk_date asc';
+		}elseif($scannerType =='doubletop' or $scannerType=='doublebottom'){
+			$totalDays=$data['duration'];
+			$parameter='order by stk_date desc limit '.$totalDays.'';
 		}elseif($scannerType =='nsedata'){
 			$from_date=$data['getDataFromDate'];
 			$field= ' * ';
@@ -1657,12 +1706,13 @@ class functions{
 		$result = $conn->resultset($query);//echo '<pre>';print_r($result);die;
 		$result1=(array) null;
 		foreach($result as $key=>$val){
-			$sql="select   $field   from tbl_daily_bhav_data where stk_symbol='".$val['stk_symbol']."'    $parameter";
+			$sql="SELECT stk_symbol, MAX(CASE WHEN stk_date = '2025-09-24' THEN stk_ttl_trd_qnty END) AS today_qty, SUM(CASE WHEN stk_date BETWEEN DATE_SUB('2025-09-24', INTERVAL 5 DAY) AND DATE_SUB('2025-09-24', INTERVAL 1 DAY)  THEN stk_ttl_trd_qnty END) AS last_5_days_sum FROM tbl_daily_bhav_data WHERE stk_symbol = 'WIPRO';";
 			$query= $conn->query($sql);
 			$result1[] = $conn->resultset($query);			
 		}		
 		$ma_status=json_encode($result1,true);
 		return $ma_status;
+		*/
 	}
 }
 $functions= new functions();

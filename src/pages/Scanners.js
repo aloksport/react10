@@ -14,7 +14,8 @@ const Scanners = () => {
         <li><Link to="double-bottom" className="dropdown-item">Double Bottom</Link></li>
         <li><Link to="nse-data" className="dropdown-item">NSE Data</Link></li>                   
         <li><Link to="StockRSI" className="dropdown-item">Top Losers</Link></li>                  
-        <li><Link to="rsi-divergence-scanner" className="dropdown-item">Volume Buzzers</Link></li>                  
+        {/* <li><Link to="volume-breakout" className="dropdown-item">Volume Buzzers</Link></li>                   */}
+        <li><Link to="breakout-with-volume" className="dropdown-item">Breakout With Volume</Link></li>                  
       </ul>
     </div>
   );

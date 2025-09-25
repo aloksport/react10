@@ -15,6 +15,8 @@ import Contact from "./pages/Contact";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Terms from "./pages/Terms";
 import NSEData from "./pages/NSEData";
+import VolumnBreakout from "./pages/VolumnBreakout";
+import BreakoutWithVolume from "./pages/BreakoutWithVolume";
 function App() {
   return (
     <Router>
@@ -27,6 +29,8 @@ function App() {
           <Route path="scanners/rsi-divergence-scanner" element={<RSIDivergence />} />
           <Route path="scanners/double-top" element={<DoubleTop />} />
           <Route path="scanners/double-bottom" element={<DoubleBottom />} />
+          <Route path="scanners/volume-breakout" element={<VolumnBreakout />} />
+          <Route path="scanners/breakout-with-volume" element={<BreakoutWithVolume />} />
           {/* Other Pages */}
           <Route path="about" element={<About />} />
           <Route path="contact" element={<Contact />} />
