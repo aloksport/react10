@@ -20,20 +20,22 @@ function TopNavBar() {
                 <NavLink to="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown">Market Tools</NavLink>                
                 <ul className="dropdown-menu">
                   <li><NavLink to="scanners/rsi-divergence-scanner" className="dropdown-item">RSI Divergence</NavLink></li>                  
-                  <li><NavLink to="scanners/StockRSI" className="dropdown-item">Top Losers</NavLink></li>                  
-                  <li><NavLink to="rsi-divergence-scanner" className="dropdown-item">Volume Buzzers</NavLink></li>                  
+                  <li><NavLink to="scanners/stock-near-resistance" className="dropdown-item">Stock Near Resistance</NavLink></li>                  
+                  <li><NavLink to="scanners/stock-near-support" className="dropdown-item">Stock Near Support</NavLink></li>
+                  <li><NavLink to="scanners/breakout-with-volume" className="dropdown-item">Breakout With Volume</NavLink></li> 
                 </ul>
               </li>
               <li className="nav-item">
-                <NavLink to="/scanners" className={({ isActive }) => "nav-link" + (isActive ? " active fw-bold" : "")}>
-                  Scanners
+                <NavLink to="/nse-data" className={({ isActive }) => "nav-link" + (isActive ? " active fw-bold" : "")}>
+                  NSE Data
                 </NavLink>
               </li>
-              <li className="nav-item">
+              
+              {/* <li className="nav-item">
                 <NavLink to="/about" className={({ isActive }) => "nav-link" + (isActive ? " active fw-bold" : "")}>
                   Alerts
                 </NavLink>
-              </li>
+              </li> */}
               <li className="nav-item">
                 <NavLink to="/about" className={({ isActive }) => "nav-link" + (isActive ? " active fw-bold" : "")}>
                   About Us
@@ -43,17 +45,7 @@ function TopNavBar() {
                 <NavLink to="/contact" className={({ isActive }) => "nav-link" + (isActive ? " active fw-bold" : "")}>
                   Contact
                 </NavLink>
-              </li>
-              <li className="nav-item">
-                <NavLink to="/privacy-policy" className={({ isActive }) => "nav-link" + (isActive ? " active fw-bold" : "")}>
-                  Privacy Policy
-                </NavLink>
-              </li>
-              <li className="nav-item">
-                <NavLink to="/terms" className={({ isActive }) => "nav-link" + (isActive ? " active fw-bold" : "")}>
-                  Terms and Conditions
-                </NavLink>
-              </li>              
+              </li>  
             </ul>
 
             {/* User Dropdown */}

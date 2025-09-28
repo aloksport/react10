@@ -3,9 +3,18 @@ import SelectBoxNifty from "../components/SelectBoxNifty";
 import Calender from "../components/Calender";
 import Global from "../components/Global";
 //import { formatDate } from "../components/Global";
+import { useMetaTags } from "../utils/MetaTags";
 const stockUrl = Global.currentHost + "/stockAction.php";
 
 function VolumnBreakout() {
+  useMetaTags({
+      title: 'Volume Breakout | Stock Screener',
+      description: 'Explore live stock screening tools and NSE data for informed trading decisions.',
+      keywords: 'NSE, stock screener, live data, trading, finance',
+      ogTitle: 'Volume Breakout | Stock Screener',
+      ogDescription: 'Real-time stock screening with NSE data.',
+      ogImage: 'http://springtown.in/images/stock-screener.jpg',
+    });
   //const [rows, setRows] = useState([]);
   const [nifty, setNifty] = useState("");
   const [days, setDays] = useState("");

@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState } from "react";
 import SelectBoxNoOfDays from "../components/SelectBoxNoOfDays";
 import SelectBoxNifty from "../components/SelectBoxNifty";
 import Global from "../components/Global";
@@ -6,6 +6,7 @@ import { formatDate } from "../components/Global";
 import calculateRSI from '../utils/RSI';
 import {analyzeRSI} from '../utils/RSI';
 //import {abcd,addNumbers} from '../utils/RSI';
+import { useMetaTags } from "../utils/MetaTags";
 const stockUrl = Global.currentHost + "/stockAction.php";
 
 function RSIDivergence() {
@@ -16,9 +17,14 @@ function RSIDivergence() {
   const [niftyInvalid, setNiftyInvalid] = useState(false);
   const [daysInvalid, setDaysInvalid] = useState(false);
   const [rsiDivergData, setrsiDivergData] = useState([]);
-  useEffect(() => {
-    document.title = "RSI Divergence | Live Stock Screener";
-  }, []);
+  useMetaTags({
+    title: 'RSI Divergence | Stock Screener',
+    description: 'Explore live stock screening tools and NSE data for informed trading decisions.',
+    keywords: 'NSE, stock screener, live data, trading, finance',
+    ogTitle: 'RSI Divergence | Stock Screener',
+    ogDescription: 'Real-time stock screening with NSE data.',
+    ogImage: 'http://springtown.in/images/stock-screener.jpg',
+  });
   const handleSubmit = async () => {
     setrsiDivergData([]);
     let valid = true;
@@ -92,8 +98,8 @@ function RSIDivergence() {
   //console.log(rsiDivergData);
   return (
     <>        
-      <h2 className="mb-3">Live Stock Screener</h2>
-      <p>This area is reserved for your market content, scanners, analysis, and more.</p>
+      <h2 className="mb-3">RSI  Divergence Scanner</h2>
+      <p>Scan the RSI divergence here. We are currently scanning only Nifty 500 stocks.</p>
       <div className="d-flex align-items-end">
         <SelectBoxNifty value={nifty} onChange={setNifty} isInvalid={niftyInvalid} />
         <SelectBoxNoOfDays value={days} onChange={setDays} isInvalid={daysInvalid} />

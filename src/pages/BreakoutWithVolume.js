@@ -1,9 +1,10 @@
-import React, { useState,useEffect  } from "react";
+import React, { useState  } from "react";
 import SelectBoxNoOfDays from "../components/SelectBoxNoOfDays";
 import SelectBoxNifty from "../components/SelectBoxNifty";
 import Global from "../components/Global";
 import { formatDate } from "../components/Global";
 import {breakoutwithvolume} from '../utils/RSI';
+import { useMetaTags } from "../utils/MetaTags";
 const stockUrl = Global.currentHost + "/stockAction.php";
 
 function BreakoutWithVolume() {
@@ -13,9 +14,14 @@ function BreakoutWithVolume() {
   const [niftyInvalid, setNiftyInvalid] = useState(false);
   const [daysInvalid, setDaysInvalid] = useState(false);
   const [breakoutWithVolume, setbreakoutWithVolume] = useState([]);
-  useEffect(() => {
-    document.title = "Breakout with volume | Live Stock Screener";
-  }, []);
+  useMetaTags({
+      title: 'Breakout with volume | Stock Screener',
+      description: 'Explore live stock screening tools and NSE data for informed trading decisions.',
+      keywords: 'NSE, stock screener, live data, trading, finance',
+      ogTitle: 'Breakout with volume | Stock Screener',
+      ogDescription: 'Real-time stock screening with NSE data.',
+      ogImage: 'http://springtown.in/images/stock-screener.jpg',
+    });
   const handleSubmit = async () => {
     setbreakoutWithVolume([]);
     let valid = true;

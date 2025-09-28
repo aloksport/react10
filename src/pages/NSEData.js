@@ -1,8 +1,9 @@
-import React, { useState,useEffect } from "react";
+import React, { useState } from "react";
 import SelectBoxNifty from "../components/SelectBoxNifty";
 import Calender from "../components/Calender";
 import Global from "../components/Global";
 //import { formatDate } from "../components/Global";
+import { useMetaTags } from "../utils/MetaTags";
 const stockUrl = Global.currentHost + "/stockAction.php";
 
 function NSEData() {
@@ -14,9 +15,14 @@ function NSEData() {
   const [NSEData, setNSEData] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const [dateError, setDateError] = useState("");
-  useEffect(() => {
-    document.title = "NSE Data | Live Stock Screener";
-  }, []);
+  useMetaTags({
+       title: 'NSE Data | Stock Screener',
+       description: 'Explore live stock screening tools and NSE data for informed trading decisions.',
+       keywords: 'NSE, stock screener, live data, trading, finance',
+       ogTitle: 'NSE Data | Stock Screener',
+       ogDescription: 'Real-time stock screening with NSE data.',
+       ogImage: 'http://springtown.in/images/stock-screener.jpg',
+     });
   const handleSubmit = async () => {
     setDays(1);// Just use it so that it doesn't give error
     setNSEData([]);let  formatted='';
@@ -69,8 +75,8 @@ function NSEData() {
   //console.log(NSEData);
   return (
     <>        
-      <h2 className="mb-3">Live Stock Screener</h2>
-      <p>This area is reserved for your market content, scanners, analysis, and more.</p>
+      <h2 className="mb-3">NSE Data</h2>
+      <p>Here is NSE Data </p>
       <div className="d-flex align-items-end">
         <SelectBoxNifty value={nifty} onChange={setNifty} isInvalid={niftyInvalid} />        
         <Calender selectedDate={selectedDate} onDateChange={setSelectedDate} error={dateError} />
