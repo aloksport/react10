@@ -1,23 +1,29 @@
-import React, { useState,useEffect } from "react";
+import React, { useState  } from "react";
 import SelectBoxNoOfDays from "../components/SelectBoxNoOfDays";
 import SelectBoxNifty from "../components/SelectBoxNifty";
 import Global from "../components/Global";
 import { formatDate } from "../components/Global";
-import {doubleBottom} from '../utils/RSI';
+import {doubleTop} from '../utils/RSI';
+import { useMetaTags } from "../utils/MetaTags";
 const stockUrl = Global.currentHost + "/stockAction.php";
 
-function DoubleBottom() {
+function NearResistance() {
   const [nifty, setNifty] = useState("");
   const [days, setDays] = useState("");
   const [loading, setLoading] = useState(false);
   const [niftyInvalid, setNiftyInvalid] = useState(false);
   const [daysInvalid, setDaysInvalid] = useState(false);
-  const [dblBottomData, setDblBottomData] = useState([]);
-  useEffect(() => {
-    document.title = "Double Bottom | Live Stock Screener";
-  }, []);
+  const [dblTopData, setDblTopData] = useState([]);
+ useMetaTags({
+     title: 'Stock Near Resistance | Stock Screener',
+     description: 'Explore live stock screening tools and NSE data for informed trading decisions.',
+     keywords: 'NSE, stock screener, live data, trading, finance',
+     ogTitle: 'Stock Near Resistance | Stock Screener',
+     ogDescription: 'Real-time stock screening with NSE data.',
+     ogImage: 'http://springtown.in/images/stock-screener.jpg',
+   });
   const handleSubmit = async () => {
-    setDblBottomData([]);
+    setDblTopData([]);
     let valid = true;
     if (!nifty) {
       setNiftyInvalid(true);
@@ -36,7 +42,7 @@ function DoubleBottom() {
       niftyStatus: nifty,
       duration: days,
       getDataFromDate: days,
-      scannerType:'doublebottom'
+      scannerType:'doubletop'
     };
 
     try {
@@ -55,11 +61,15 @@ function DoubleBottom() {
         const lowPrice = stockArray.map(item => parseFloat(item.stk_low_price));
         const closePrice = stockArray.map(item => parseFloat(item.stk_close_price));
         const tradingDate = stockArray.map(item => item.stk_date);
+        //highPrice.reverse();
+        //lowPrice.reverse();
+        //closePrice.reverse();
+        //tradingDate.reverse();
         
         // Call the double Top function
-        const dblBottom= doubleBottom(stockSymbol, lowPrice, closePrice, tradingDate, days);
-        if (dblBottom) {
-            setDblBottomData(prev => [...prev, dblBottom]);
+        const dblTop= doubleTop(stockSymbol, highPrice, closePrice, tradingDate, days);
+        if (dblTop) {
+            setDblTopData(prev => [...prev, dblTop]);
         }
       });      
     } catch (err) {
@@ -68,11 +78,11 @@ function DoubleBottom() {
         setLoading(false);
     }
   };
-  //console.log(dblBottomData);
+  //console.log(dblTopData);
   return (
     <>        
-      <h2 className="mb-3">Live Stock Screener</h2>
-      <p>This area is reserved for your market content, scanners, analysis, and more.</p>
+      <h2 className="mb-3">Stock Near Resistance</h2>
+      <p>This scanner scan stock which are at near resistance for number of days provided by you.</p>
       <div className="d-flex align-items-end">
         <SelectBoxNifty value={nifty} onChange={setNifty} isInvalid={niftyInvalid} />
         <SelectBoxNoOfDays value={days} onChange={setDays} isInvalid={daysInvalid} />
@@ -100,12 +110,12 @@ function DoubleBottom() {
               </div>
             </td>
           </tr>
-        ) : dblBottomData.length > 0 ? (
-          dblBottomData.map((item, index) => (
+        ) : dblTopData.length > 0 ? (
+          dblTopData.map((item, index) => (
             <tr key={index}>
               <td>{item.symbol}</td>
-              <td>{formatDate(item.todayDate)} / {formatDate(item.lowestDate)} </td>
-              <td>{item.todayLow} / {item.lowestPrice}</td>
+              <td>{formatDate(item.todayDate)} / {formatDate(item.highestDate)} </td>
+              <td>{item.todayHigh} / {item.highestPrice}</td>
               <td>{item.type}</td>
             </tr>
           ))
@@ -122,4 +132,4 @@ function DoubleBottom() {
   );
 }
 
-export default DoubleBottom;
+export default NearResistance;
